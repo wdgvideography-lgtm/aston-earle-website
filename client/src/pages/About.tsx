@@ -9,7 +9,9 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 
-const OLIVER = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/about-oliver-YyiiVMrpGTMHAPxQrt36Nb.webp";
+const OLIVER = "/manus-storage/oliver-scania_d3abf2f8.jpg";
+const BILLY_TRUCK = "/manus-storage/billy-whizz-truck_8f44e2a4.jpg";
+const BILLY_PORTRAIT = "/manus-storage/billy-whizz-portrait_6072934b.jpg";
 const HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/hero-european-nRrYC7qmjk65wYZzCYdxYy.webp";
 const WAREHOUSE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/warehouse-logistics-53rAr2W64JaZoR58bYVGK7.webp";
 const LOGO = "/manus-storage/ae-logo_efe7df47.png";
@@ -86,6 +88,11 @@ export default function About() {
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white mt-3 mb-8 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
                   William "Billy Whizz" Earle
                 </h2>
+                {/* Billy Whizz Photos */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+                  <img src={BILLY_TRUCK} alt="Billy Whizz in his truck" className="w-full sm:w-[280px] h-[220px] object-cover object-top border-2 border-white/10" />
+                  <img src={BILLY_PORTRAIT} alt="Billy Whizz" className="w-full sm:w-[280px] h-[220px] object-cover object-top border-2 border-white/10" />
+                </div>
                 <div className="w-16 h-[2px] bg-maroon mx-auto mb-10" />
                 <div className="space-y-5 text-white/60 text-lg leading-relaxed text-left sm:text-center">
                   <p>
