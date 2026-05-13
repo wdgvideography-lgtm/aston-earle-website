@@ -1,12 +1,13 @@
 /*
- * About Page – Aston & Earle Transport V2
- * Focus: Oliver Aston founder story, William Earle legacy, values, timeline
+ * About Page – Aston & Earle Transport V3
+ * Updated with real founder story (Oliver Aston) and William "Billy Whizz" Earle memorial
+ * Location: Gloucestershire, UK | Est. 2026
  */
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "wouter";
-import { ShieldCheck, Handshake, Clock, Trophy, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const OLIVER = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/about-oliver-YyiiVMrpGTMHAPxQrt36Nb.webp";
 const HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/hero-european-nRrYC7qmjk65wYZzCYdxYy.webp";
@@ -33,7 +34,7 @@ export default function About() {
                 <span className="text-cream">From the ground up.</span>
               </h1>
               <p className="text-white/60 text-lg max-w-xl leading-relaxed">
-                A logistics brokerage built on years of industry experience, strong values and a commitment to doing things the right way.
+                Old school standards. Modern day solutions. Done Properly.
               </p>
             </AnimatedSection>
           </div>
@@ -54,13 +55,19 @@ export default function About() {
                   </h2>
                   <div className="space-y-4 text-charcoal/65 leading-relaxed">
                     <p>
-                      Aston & Earle Transport was founded by Oliver Aston with a clear vision: to build a logistics business that does things properly. Not cutting corners, not over-promising, just delivering reliable transport solutions that businesses can actually depend on.
+                      Aston & Earle Transport was founded by Oliver Aston with one clear goal — to build a transport business based on old-school standards, honest relationships and doing things properly.
                     </p>
                     <p>
-                      With years of experience in the transport and logistics industry, Oliver saw a gap for a brokerage that genuinely cares about the service it provides. One that picks up the phone, keeps you updated, and treats every load like it matters — because it does.
+                      Raised around trucks, workshops and the realities of the haulage industry from a young age, Oliver's experience comes from being hands-on in the job himself. From European fridge work to heavy machinery and specialist transport operations, Aston & Earle was built from genuine industry experience rather than a boardroom idea.
                     </p>
                     <p>
-                      Based in Gloucestershire, Aston & Earle has grown through word of mouth and repeat business. That tells you everything you need to know about how we operate.
+                      The company was created to bring a more personal, reliable approach to transport brokerage — built on communication, accountability and pride in the work.
+                    </p>
+                    <p>
+                      Based in Gloucestershire, Aston & Earle continues to grow through reputation, relationships and repeat business.
+                    </p>
+                    <p className="text-charcoal font-semibold italic">
+                      No inflated promises. No corporate nonsense. Just transport done properly.
                     </p>
                   </div>
                 </div>
@@ -69,23 +76,42 @@ export default function About() {
           </div>
         </section>
 
-        {/* Legacy Section */}
-        <section className="py-20 lg:py-28 bg-cream">
+        {/* William "Billy Whizz" Earle Memorial */}
+        <section className="py-20 lg:py-28 bg-charcoal">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <AnimatedSection>
-                <img src={LOGO} alt="Aston & Earle Transport" className="h-[90px] w-auto object-contain mx-auto mb-8" />
-                <span className="text-maroon text-[11px] uppercase tracking-[0.25em] font-bold">The Legacy</span>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl text-charcoal mt-3 mb-8 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                  His Legacy. Our Foundation.
+                <img src={LOGO} alt="Aston & Earle Transport" className="h-[80px] w-auto object-contain mx-auto mb-10 opacity-80" />
+                <span className="text-maroon-light text-[11px] uppercase tracking-[0.25em] font-bold">The Legacy</span>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white mt-3 mb-8 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+                  William "Billy Whizz" Earle
                 </h2>
-                <div className="w-16 h-[2px] bg-maroon mx-auto mb-8" />
-                <p className="text-charcoal/65 text-lg leading-relaxed mb-6">
-                  The "Earle" in Aston & Earle is a tribute to William Earle — a man who set the standard for how things should be done. His work ethic, his respect for others, and his refusal to accept anything less than the best are the principles this business was built on.
-                </p>
-                <p className="text-charcoal/65 text-lg leading-relaxed">
-                  William's legacy isn't just a name on a logo. It's a daily reminder of the standards we hold ourselves to. Every job we take on, every promise we make — we ask ourselves whether it would meet his approval. That's the bar.
-                </p>
+                <div className="w-16 h-[2px] bg-maroon mx-auto mb-10" />
+                <div className="space-y-5 text-white/60 text-lg leading-relaxed text-left sm:text-center">
+                  <p>
+                    Aston & Earle was built on the standards, mentality and work ethic passed down by William "Billy Whizz" Earle.
+                  </p>
+                  <p>
+                    Bill spent his life around trucks, workshops and transport yards. From driving across Europe to repairing machinery with his own hands, transport was never simply a job to him — it was who he was.
+                  </p>
+                  <p>
+                    He believed in doing things properly. Keeping your word. Looking after equipment. Taking pride in your work and never cutting corners.
+                  </p>
+                  <p>
+                    There was nothing he couldn't fix, nobody he wouldn't help, and no problem he would walk away from.
+                  </p>
+                  <p>
+                    Those old-school values became the foundation Aston & Earle was built on.
+                  </p>
+                  <p>
+                    Today, every load moved, every relationship built and every mile covered carries that legacy forward.
+                  </p>
+                </div>
+                <div className="mt-12 pt-8 border-t border-white/10">
+                  <p className="text-cream text-lg font-bold italic" style={{ fontFamily: "var(--font-heading)" }}>
+                    Old school standards. Modern day solutions. Done Properly.
+                  </p>
+                </div>
               </AnimatedSection>
             </div>
           </div>
@@ -105,10 +131,10 @@ export default function About() {
 
             <div className="max-w-2xl mx-auto space-y-0">
               {[
-                { year: "The Beginning", title: "Industry Experience", desc: "Years spent working in transport and logistics, learning the industry from the inside out. Understanding what works, what doesn't, and what clients actually need." },
-                { year: "The Vision", title: "A Better Way", desc: "Recognising the gap for a logistics brokerage that genuinely delivers on its promises. One built on relationships, not just transactions." },
-                { year: "Est. 2024", title: "Aston & Earle Founded", desc: "Launching the business in Gloucestershire with a clear mission: European logistics, done properly. Named in honour of William Earle and the standards he set." },
-                { year: "Today", title: "Growing Through Trust", desc: "Expanding our network of trusted hauliers across the UK, Ireland and Europe. Every new client comes through reputation and results." },
+                { year: "The Beginning", title: "Hands-On Experience", desc: "Years spent in the thick of it — European fridge work, heavy machinery, specialist transport operations. Learning the industry from the cab, not a classroom." },
+                { year: "The Vision", title: "A Better Way", desc: "Recognising the gap for a transport brokerage that genuinely cares. One built on communication, accountability and pride in the work." },
+                { year: "Est. 2026", title: "Aston & Earle Founded", desc: "Launching in Gloucestershire with a clear mission: old-school standards, modern solutions. Named in honour of William 'Billy Whizz' Earle and the values he stood for." },
+                { year: "Today", title: "Growing Through Reputation", desc: "Expanding through word of mouth and repeat business. Every new client comes through results, not marketing." },
               ].map((item, i) => (
                 <AnimatedSection key={i} delay={i * 100}>
                   <div className="flex gap-6 lg:gap-10 pb-12 last:pb-0">
@@ -123,42 +149,6 @@ export default function About() {
                       </h3>
                       <p className="text-charcoal/55 text-sm leading-relaxed">{item.desc}</p>
                     </div>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Values */}
-        <section className="py-20 lg:py-28 bg-cream">
-          <div className="container">
-            <AnimatedSection>
-              <div className="text-center max-w-2xl mx-auto mb-16">
-                <span className="text-maroon text-[11px] uppercase tracking-[0.25em] font-bold">Our Values</span>
-                <h2 className="text-3xl sm:text-4xl text-charcoal mt-3 mb-5 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                  What we stand for.
-                </h2>
-                <p className="text-charcoal/60 leading-relaxed">
-                  These aren't just words on a wall. They're how we operate, every single day.
-                </p>
-              </div>
-            </AnimatedSection>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { icon: ShieldCheck, title: "Integrity", desc: "Honest, transparent and reliable in everything we do. If we say it, we mean it." },
-                { icon: Handshake, title: "Relationships", desc: "We build long-term partnerships based on trust. Your business matters to us." },
-                { icon: Clock, title: "Accountability", desc: "We take ownership and deliver on our promises. No passing the buck." },
-                { icon: Trophy, title: "Results", desc: "Focused on finding the best solutions that drive your success. That's the bottom line." },
-              ].map((v, i) => (
-                <AnimatedSection key={v.title} delay={i * 100}>
-                  <div className="bg-white p-7 h-full border border-border text-center">
-                    <v.icon className="w-8 h-8 text-maroon mx-auto mb-5" />
-                    <h3 className="text-charcoal font-bold text-lg mb-2 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                      {v.title}
-                    </h3>
-                    <p className="text-charcoal/55 text-sm leading-relaxed">{v.desc}</p>
                   </div>
                 </AnimatedSection>
               ))}

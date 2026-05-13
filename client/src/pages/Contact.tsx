@@ -317,7 +317,7 @@ export default function Contact() {
                         </div>
                         <div>
                           <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/40 font-bold mb-0.5">Location</p>
-                          <p className="text-charcoal font-semibold text-sm">Tibley, Gloucestershire</p>
+                          <p className="text-charcoal font-semibold text-sm">Gloucestershire, UK</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
@@ -378,7 +378,7 @@ export default function Contact() {
             <AnimatedSection>
               <div className="text-center mb-10">
                 <h2 className="text-2xl sm:text-3xl text-charcoal font-bold tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                  Based in Gloucestershire
+                  Based in Gloucestershire, UK
                 </h2>
                 <p className="text-charcoal/55 text-sm mt-2">Serving the UK, Ireland and Europe</p>
               </div>

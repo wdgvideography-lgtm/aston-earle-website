@@ -89,7 +89,7 @@ export default function Footer() {
               <li>
                 <div className="flex items-start gap-3 text-white/50 text-sm">
                   <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-maroon-light" />
-                  Tibley, Gloucestershire
+                  Gloucestershire, UK
                 </div>
               </li>
             </ul>
