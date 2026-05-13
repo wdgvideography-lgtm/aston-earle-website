@@ -11,6 +11,7 @@ import { ShieldCheck, Handshake, Clock, Trophy, ArrowRight } from "lucide-react"
 const OLIVER = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/about-oliver-YyiiVMrpGTMHAPxQrt36Nb.webp";
 const HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/hero-european-nRrYC7qmjk65wYZzCYdxYy.webp";
 const WAREHOUSE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/warehouse-logistics-53rAr2W64JaZoR58bYVGK7.webp";
+const LOGO = "/manus-storage/ae-logo_efe7df47.png";
 
 export default function About() {
   return (
@@ -73,6 +74,7 @@ export default function About() {
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <AnimatedSection>
+                <img src={LOGO} alt="Aston & Earle Transport" className="h-[90px] w-auto object-contain mx-auto mb-8" />
                 <span className="text-maroon text-[11px] uppercase tracking-[0.25em] font-bold">The Legacy</span>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl text-charcoal mt-3 mb-8 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
                   His Legacy. Our Foundation.

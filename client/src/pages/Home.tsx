@@ -28,6 +28,7 @@ const HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53Lj
 const PORT = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/european-port-E8rGoigFU49NRwucLeAdLH.webp";
 const WAREHOUSE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/warehouse-logistics-53rAr2W64JaZoR58bYVGK7.webp";
 const IRISH = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/irish-crossing-AwVNaMTx5y7ETs9EgGsjL2.webp";
+const LOGO = "/manus-storage/ae-logo_efe7df47.png";
 
 /* ─── Hero ─── */
 function Hero() {
@@ -40,6 +41,9 @@ function Hero() {
 
       <div className="container relative z-10 py-24 lg:py-32">
         <div className="max-w-2xl">
+          {/* Prominent Logo */}
+          <img src={LOGO} alt="Aston & Earle Transport" className="h-[100px] lg:h-[130px] w-auto object-contain mb-8 drop-shadow-lg" />
+
           <div className="inline-flex items-center gap-2 bg-maroon/20 border border-maroon/30 px-4 py-1.5 mb-8">
             <div className="w-1.5 h-1.5 bg-maroon rounded-full" />
             <span className="text-cream text-[11px] uppercase tracking-[0.2em] font-semibold">UK &middot; Ireland &middot; Europe</span>

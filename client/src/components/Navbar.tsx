@@ -1,11 +1,13 @@
 /*
  * Navbar – Aston & Earle Transport V2
- * Design: Premium modern sans-serif, white/maroon/cream, bold typography
- * Multi-page nav with smooth transitions
+ * Design: Premium modern, white bg, maroon/cream, bold typography
+ * Real logo prominently displayed
  */
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Phone, Mail, Menu, X } from "lucide-react";
+
+const LOGO = "/manus-storage/ae-logo_efe7df47.png";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -65,20 +67,14 @@ export default function Navbar() {
             : "bg-white border-transparent"
         }`}
       >
-        <div className="container flex items-center justify-between h-[72px]">
+        <div className="container flex items-center justify-between h-[80px]">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 bg-maroon flex items-center justify-center">
-              <span className="text-cream font-bold text-lg tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>AE</span>
-            </div>
-            <div className="hidden sm:block">
-              <div className="text-charcoal font-bold text-[17px] tracking-tight leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                ASTON & EARLE
-              </div>
-              <div className="text-maroon text-[9px] uppercase tracking-[0.35em] font-semibold leading-tight">
-                Transport
-              </div>
-            </div>
+          <Link href="/" className="flex items-center shrink-0">
+            <img
+              src={LOGO}
+              alt="Aston & Earle Transport"
+              className="h-[60px] w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop links */}

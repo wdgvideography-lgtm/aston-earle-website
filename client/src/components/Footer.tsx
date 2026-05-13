@@ -1,9 +1,11 @@
 /*
  * Footer – Aston & Earle Transport V2
- * Design: Dark charcoal footer, maroon accents, clean modern layout
+ * Design: Dark charcoal footer, maroon accents, real logo
  */
 import { Link } from "wouter";
 import { Phone, Mail, MapPin } from "lucide-react";
+
+const LOGO = "/manus-storage/ae-logo_efe7df47.png";
 
 export default function Footer() {
   return (
@@ -15,17 +17,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-maroon flex items-center justify-center">
-                <span className="text-cream font-bold text-lg" style={{ fontFamily: "var(--font-heading)" }}>AE</span>
-              </div>
-              <div>
-                <div className="text-white font-bold text-base tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                  ASTON & EARLE
-                </div>
-                <div className="text-maroon-light text-[9px] uppercase tracking-[0.35em] font-semibold">Transport</div>
-              </div>
-            </div>
+            <img
+              src={LOGO}
+              alt="Aston & Earle Transport"
+              className="h-[70px] w-auto object-contain mb-6 brightness-0 invert opacity-80"
+            />
             <p className="text-white/50 text-sm leading-relaxed mb-6">
               Premium logistics brokerage connecting businesses to trusted haulage solutions across the UK, Ireland and Europe.
             </p>
