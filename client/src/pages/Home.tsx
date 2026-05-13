@@ -1,380 +1,149 @@
 /*
- * Home Page – Aston & Earle Transport V2
- * Design: Premium modern sans-serif, white bg, maroon/cream/black
- * Sections: Hero, Stats, Services overview, Coverage, Why Us, Process, Testimonials, CTA, Footer
+ * Home Page – Aston & Earle Transport V3
+ * Design: Apple-style cinematic scroll experience
+ * Dark backgrounds, bold typography, scroll-triggered animations, parallax
  */
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "wouter";
-import { useState, useEffect, useCallback, useRef } from "react";
-import {
-  ShieldCheck,
-  Handshake,
-  Clock,
-  Trophy,
-  Truck,
-  Thermometer,
-  Globe,
-  Zap,
-  Package,
-  ArrowRight,
-  ChevronDown,
-  Quote,
-  MapPin,
-} from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ArrowRight, ArrowDown } from "lucide-react";
 
 /* ─── Images ─── */
 const HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/hero-european-nRrYC7qmjk65wYZzCYdxYy.webp";
 const PORT = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/european-port-E8rGoigFU49NRwucLeAdLH.webp";
 const WAREHOUSE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/warehouse-logistics-53rAr2W64JaZoR58bYVGK7.webp";
 const IRISH = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/irish-crossing-AwVNaMTx5y7ETs9EgGsjL2.webp";
+const FRIDGE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/refrigerated-truck-CSiLxbfPAmydumKG6tZmyC.webp";
 const LOGO = "/manus-storage/ae-logo_efe7df47.png";
-
-/* Vehicle images for intro animation */
 const VEHICLE_VAN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/vehicle-van-T5E2ApzAvN7a39SbF7HP7p.png";
 const VEHICLE_RIGID = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/vehicle-rigid-fVJVuotwb4xZdSxBTKmuqC.png";
 const VEHICLE_HGV = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/vehicle-hgv-cJoQAHA7SVJQYfdQfBEQwY.png";
 
-/* ─── Fleet Scroll Animation Section ─── */
-function FleetShowcase() {
-  const [phase, setPhase] = useState<"initial" | "animating" | "done">("initial");
-  const sectionRef = useRef<HTMLDivElement>(null);
+/* ─── Scroll-triggered section hook ─── */
+function useReveal(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.unobserve(el); } }, { threshold });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+}
 
-  const triggerAnimation = () => {
-    setPhase("animating");
-    // Scroll to the fleet section
-    setTimeout(() => {
-      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 100);
-    setTimeout(() => setPhase("done"), 1200);
-  };
-
-  const vehicles = [
-    { img: VEHICLE_VAN, name: "Van", label: "Light Freight", size: "w-[140px] sm:w-[180px] lg:w-[240px]" },
-    { img: VEHICLE_RIGID, name: "Rigid", label: "Insulated", size: "w-[160px] sm:w-[220px] lg:w-[300px]" },
-    { img: VEHICLE_HGV, name: "Class 1 HGV", label: "Insulated Trailer", size: "w-[200px] sm:w-[260px] lg:w-[360px]" },
-  ];
-
+/* ─── Cinematic Section Component ─── */
+function CinematicSection({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const { ref, visible } = useReveal(0.1);
   return (
-    <section ref={sectionRef} className="relative bg-cream overflow-hidden">
-      {/* Initial state - before animation */}
-      <div className={`flex flex-col items-center justify-center py-20 lg:py-28 transition-all duration-500 ${
-        phase !== "initial" ? "opacity-0 scale-95 absolute inset-0 pointer-events-none" : "opacity-100"
-      }`}>
-        <img src={LOGO} alt="Aston & Earle" className="h-[50px] lg:h-[60px] w-auto object-contain mb-6" />
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl text-charcoal font-black tracking-tight text-center" style={{ fontFamily: "var(--font-heading)" }}>
-          Our Fleet
-        </h2>
-        <p className="text-charcoal/50 text-sm mt-3 text-center max-w-md">
-          See the vehicles that keep your freight moving across the UK, Ireland and Europe.
-        </p>
-        <button
-          onClick={triggerAnimation}
-          className="mt-8 inline-flex items-center gap-3 bg-maroon text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-maroon-light transition-all duration-200 active:scale-[0.97]"
-        >
-          Let's Go <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Animated state - vehicles fly in from bottom */}
-      <div className={`py-20 lg:py-28 transition-all duration-500 ${
-        phase === "initial" ? "opacity-0 pointer-events-none h-0 overflow-hidden" : "opacity-100"
-      }`}>
-        {/* Header text */}
-        <div className={`text-center mb-14 transition-all duration-700 ${
-          phase !== "initial" ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-        }`} style={{ transitionDelay: "200ms" }}>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl text-charcoal font-black tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-            Which do you need?
-          </h2>
-          <p className="text-charcoal/50 text-sm mt-2">Choose your vehicle type and get a quote.</p>
-        </div>
-
-        {/* Vehicles - enter from bottom with 3D rotation */}
-        <div className="flex items-end justify-center gap-6 sm:gap-10 lg:gap-16 perspective-[1200px]">
-          {vehicles.map((v, i) => (
-            <div
-              key={v.name}
-              className="flex flex-col items-center"
-            >
-              <div
-                className={`transition-all duration-[1000ms] ${
-                  phase !== "initial"
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-[200px]"
-                }`}
-                style={{
-                  transitionDelay: phase !== "initial" ? `${i * 150}ms` : "0ms",
-                  transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-                  transform: phase !== "initial"
-                    ? "translateY(0) rotateX(0deg)"
-                    : "translateY(200px) rotateX(25deg)",
-                }}
-              >
-                <img
-                  src={v.img}
-                  alt={v.name}
-                  className={`${v.size} h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)] hover:scale-[1.08] transition-transform duration-300 cursor-pointer`}
-                />
-              </div>
-              <div
-                className={`mt-5 text-center transition-all duration-500 ${
-                  phase === "done" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                }`}
-                style={{ transitionDelay: `${800 + i * 100}ms` }}
-              >
-                <p className="text-charcoal font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>{v.name}</p>
-                <p className="text-charcoal/40 text-[11px] uppercase tracking-wider mt-0.5">{v.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA button after animation */}
-        <div className={`text-center mt-14 transition-all duration-700 ${
-          phase === "done" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`} style={{ transitionDelay: "1100ms" }}>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-3 bg-maroon text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-maroon-light transition-all duration-200 active:scale-[0.97]"
-          >
-            I'm Ready <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </div>
-    </section>
+    <div ref={ref} className={`transition-all duration-[1200ms] ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"} ${className}`}
+      style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}>
+      {children}
+    </div>
   );
 }
 
 /* ─── Hero ─── */
 function Hero() {
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    const handle = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handle, { passive: true });
+    return () => window.removeEventListener("scroll", handle);
+  }, []);
+
   return (
-    <section className="relative min-h-[92vh] flex items-center overflow-hidden">
-      <div className="absolute inset-0">
-        <img src={HERO} alt="European truck on motorway at dusk" className="w-full h-full object-cover" loading="eager" />
-        <div className="absolute inset-0 bg-gradient-to-r from-charcoal/95 via-charcoal/75 to-charcoal/30" />
+    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+      {/* Parallax background */}
+      <div className="absolute inset-0" style={{ transform: `scale(${1 + scrollY * 0.0003}) translateY(${scrollY * 0.3}px)` }}>
+        <img src={HERO} alt="" className="w-full h-full object-cover opacity-60" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black" />
+
+      {/* Content */}
+      <div className="relative z-10 text-center px-4" style={{ transform: `translateY(${scrollY * -0.2}px)`, opacity: Math.max(0, 1 - scrollY / 600) }}>
+        <img src={LOGO} alt="Aston & Earle" className="h-[80px] lg:h-[110px] w-auto mx-auto mb-10 drop-shadow-2xl" />
+        <h1 className="text-5xl sm:text-6xl lg:text-8xl text-white font-black tracking-tighter leading-[0.9]" style={{ fontFamily: "var(--font-heading)" }}>
+          European Logistics.
+          <br />
+          <span className="text-cream">Done Properly.</span>
+        </h1>
+        <p className="text-white/50 text-lg mt-6 max-w-md mx-auto font-light">
+          Premium haulage brokerage. UK. Ireland. Europe.
+        </p>
       </div>
 
-      <div className="container relative z-10 py-24 lg:py-32">
-        <div className="max-w-2xl">
-          {/* Prominent Logo */}
-          <img src={LOGO} alt="Aston & Earle Transport" className="h-[100px] lg:h-[130px] w-auto object-contain mb-8 drop-shadow-lg" />
+      {/* Scroll indicator */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/30 animate-bounce">
+        <ArrowDown className="w-6 h-6" />
+      </div>
+    </section>
+  );
+}
 
-          <div className="inline-flex items-center gap-2 bg-maroon/20 border border-maroon/30 px-4 py-1.5 mb-8">
-            <div className="w-1.5 h-1.5 bg-maroon rounded-full" />
-            <span className="text-cream text-[11px] uppercase tracking-[0.2em] font-semibold">UK &middot; Ireland &middot; Europe</span>
-          </div>
-
-          <h1
-            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-white font-black leading-[1.05] mb-6 tracking-tight"
-            style={{ fontFamily: "var(--font-heading)" }}
-          >
-            European Logistics.
+/* ─── Statement Section ─── */
+function StatementSection() {
+  return (
+    <section className="bg-black py-32 lg:py-44">
+      <div className="container">
+        <CinematicSection>
+          <p className="text-3xl sm:text-4xl lg:text-6xl text-white font-black tracking-tight leading-[1.1] max-w-4xl" style={{ fontFamily: "var(--font-heading)" }}>
+            We don't just move freight.
             <br />
-            <span className="text-cream">Done Properly.</span>
-          </h1>
-
-          <p className="text-white/70 text-lg sm:text-xl leading-relaxed mb-10 max-w-lg font-light">
-            Premium logistics brokerage connecting businesses to trusted haulage solutions. From single pallets to full loads, across the UK and beyond.
+            <span className="text-white/30">We move businesses forward.</span>
           </p>
-
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-3 bg-maroon text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-maroon-light transition-all duration-200 active:scale-[0.97]"
-            >
-              Get a Quote
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/services"
-              className="inline-flex items-center gap-3 border-2 border-white/25 text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:border-cream hover:text-cream transition-all duration-200"
-            >
-              Our Services
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <button
-        onClick={() => document.getElementById("stats")?.scrollIntoView({ behavior: "smooth" })}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40 hover:text-cream transition-colors duration-200 animate-bounce"
-      >
-        <ChevronDown className="w-7 h-7" />
-      </button>
-    </section>
-  );
-}
-
-/* ─── Stats Bar ─── */
-function StatsBar() {
-  const stats = [
-    { value: "UK Wide", label: "Coverage" },
-    { value: "24/7", label: "Availability" },
-    { value: "Europe", label: "& Ireland" },
-    { value: "100%", label: "Commitment" },
-  ];
-
-  return (
-    <section id="stats" className="bg-maroon">
-      <div className="container py-10 lg:py-12">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
-          {stats.map((s, i) => (
-            <AnimatedSection key={s.label} delay={i * 80}>
-              <div className="text-center">
-                <div className="text-cream text-2xl sm:text-3xl font-black tracking-tight mb-1" style={{ fontFamily: "var(--font-heading)" }}>
-                  {s.value}
-                </div>
-                <div className="text-white/50 text-xs uppercase tracking-[0.2em] font-semibold">{s.label}</div>
-              </div>
-            </AnimatedSection>
-          ))}
-        </div>
+        </CinematicSection>
       </div>
     </section>
   );
 }
 
-/* ─── Services Overview ─── */
-function ServicesOverview() {
-  const services = [
-    { icon: Truck, title: "General Haulage", desc: "Full and part-load haulage across the UK. The right vehicle, the right haulier, every time." },
-    { icon: Globe, title: "European Freight", desc: "Seamless freight solutions spanning the continent. From the UK to mainland Europe and back." },
-    { icon: MapPin, title: "Irish Freight", desc: "Reliable transport links between the UK and Ireland. Cross-channel logistics handled properly." },
-    { icon: Thermometer, title: "Refrigerated Transport", desc: "Temperature-controlled haulage for perishable and sensitive goods. Cold chain integrity guaranteed." },
-    { icon: Zap, title: "Time Critical Loads", desc: "When it absolutely has to be there. Dedicated, urgent transport for time-sensitive freight." },
-    { icon: Package, title: "Pallet & Part Loads", desc: "Cost-effective solutions for smaller consignments. From single pallets to part-load shipments." },
+/* ─── Fleet Showcase ─── */
+function FleetShowcase() {
+  const { ref, visible } = useReveal(0.15);
+  const vehicles = [
+    { img: VEHICLE_VAN, name: "Van", label: "Light Freight" },
+    { img: VEHICLE_RIGID, name: "Rigid", label: "Insulated" },
+    { img: VEHICLE_HGV, name: "Class 1 HGV", label: "Insulated Trailer" },
   ];
 
   return (
-    <section className="py-20 lg:py-28 bg-white">
+    <section ref={ref} className="bg-charcoal py-28 lg:py-40 overflow-hidden">
       <div className="container">
-        <AnimatedSection>
-          <div className="max-w-2xl mb-16">
-            <span className="text-maroon text-[11px] uppercase tracking-[0.25em] font-bold">What We Do</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl text-charcoal mt-3 mb-5 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-              Logistics solutions that
-              <br className="hidden sm:block" /> actually deliver.
+        <CinematicSection>
+          <div className="text-center mb-20">
+            <p className="text-maroon-light text-[11px] uppercase tracking-[0.3em] font-bold mb-4">The Fleet</p>
+            <h2 className="text-4xl sm:text-5xl lg:text-7xl text-white font-black tracking-tighter" style={{ fontFamily: "var(--font-heading)" }}>
+              Three sizes.<br /><span className="text-white/30">One standard.</span>
             </h2>
-            <p className="text-charcoal/60 leading-relaxed max-w-lg">
-              We connect your freight with the right hauliers. No middlemen, no runaround. Just reliable transport, handled properly from start to finish.
-            </p>
           </div>
-        </AnimatedSection>
+        </CinematicSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((s, i) => (
-            <AnimatedSection key={s.title} delay={i * 80}>
-              <div className="group p-7 lg:p-8 border border-border hover:border-maroon/30 transition-all duration-300 hover:shadow-lg hover:shadow-maroon/5 h-full bg-white">
-                <div className="w-11 h-11 bg-cream flex items-center justify-center mb-5 group-hover:bg-maroon/10 transition-colors duration-300">
-                  <s.icon className="w-5 h-5 text-maroon" />
-                </div>
-                <h3 className="text-lg text-charcoal font-bold mb-2 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                  {s.title}
-                </h3>
-                <p className="text-charcoal/55 text-sm leading-relaxed">{s.desc}</p>
-                <Link
-                  href="/services"
-                  className="inline-flex items-center gap-2 text-maroon text-[12px] font-bold uppercase tracking-[0.1em] mt-5 hover:gap-3 transition-all duration-200"
-                >
-                  Learn More <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+        <div className="flex items-end justify-center gap-8 sm:gap-12 lg:gap-20">
+          {vehicles.map((v, i) => (
+            <div
+              key={v.name}
+              className={`flex flex-col items-center transition-all duration-[1200ms] ${
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[80px]"
+              }`}
+              style={{
+                transitionDelay: `${300 + i * 200}ms`,
+                transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+            >
+              <img
+                src={v.img}
+                alt={v.name}
+                className={`${i === 0 ? "w-[120px] sm:w-[160px] lg:w-[220px]" : i === 1 ? "w-[140px] sm:w-[200px] lg:w-[280px]" : "w-[180px] sm:w-[240px] lg:w-[360px]"} h-auto object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.8)] hover:scale-[1.05] transition-transform duration-500`}
+              />
+              <div className={`mt-6 text-center transition-all duration-700 ${visible ? "opacity-100" : "opacity-0"}`}
+                style={{ transitionDelay: `${800 + i * 150}ms` }}>
+                <p className="text-white font-bold text-base tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>{v.name}</p>
+                <p className="text-white/30 text-[11px] uppercase tracking-[0.15em] mt-1">{v.label}</p>
               </div>
-            </AnimatedSection>
-          ))}
-        </div>
-
-        <AnimatedSection className="mt-12 text-center">
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-3 bg-charcoal text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-charcoal-light transition-all duration-200 active:scale-[0.97]"
-          >
-            View All Services <ArrowRight className="w-4 h-4" />
-          </Link>
-        </AnimatedSection>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Coverage Section ─── */
-function CoverageSection() {
-  return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0">
-        <img src={IRISH} alt="Cargo ferry crossing the Irish Sea" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-charcoal/88" />
-      </div>
-      <div className="container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <AnimatedSection direction="left">
-            <span className="text-maroon-light text-[11px] uppercase tracking-[0.25em] font-bold">Our Reach</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white mt-3 mb-6 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-              UK. Ireland. Europe.
-              <br />
-              <span className="text-cream">Wherever you need us.</span>
-            </h2>
-            <p className="text-white/60 leading-relaxed mb-8 max-w-lg">
-              From local UK deliveries to cross-channel European freight, we have the network and the know-how to get your goods where they need to be. Our trusted haulier partnerships span the continent.
-            </p>
-            <div className="grid grid-cols-3 gap-6">
-              {[
-                { region: "United Kingdom", detail: "Nationwide coverage" },
-                { region: "Ireland", detail: "North & Republic" },
-                { region: "Europe", detail: "Continent-wide" },
-              ].map((r) => (
-                <div key={r.region}>
-                  <div className="text-cream font-bold text-sm mb-1" style={{ fontFamily: "var(--font-heading)" }}>{r.region}</div>
-                  <div className="text-white/40 text-xs">{r.detail}</div>
-                </div>
-              ))}
             </div>
-          </AnimatedSection>
-          <AnimatedSection direction="right" delay={200}>
-            <img src={PORT} alt="European freight port at twilight" className="w-full aspect-[4/3] object-cover shadow-2xl" />
-          </AnimatedSection>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── Why Choose Us ─── */
-function WhyUs() {
-  const reasons = [
-    { icon: ShieldCheck, title: "Integrity", desc: "Honest, transparent and reliable. We say what we mean and deliver what we promise." },
-    { icon: Handshake, title: "Relationships", desc: "We build long-term partnerships, not one-off transactions. Your success is our business." },
-    { icon: Clock, title: "Accountability", desc: "We take ownership of every job. If something needs sorting, we sort it. No excuses." },
-    { icon: Trophy, title: "Results", desc: "We're not here to talk. We're here to deliver. The right solution, every single time." },
-  ];
-
-  return (
-    <section className="py-20 lg:py-28 bg-cream">
-      <div className="container">
-        <AnimatedSection>
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-maroon text-[11px] uppercase tracking-[0.25em] font-bold">Why Aston & Earle</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl text-charcoal mt-3 mb-5 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-              Built on values that matter.
-            </h2>
-            <p className="text-charcoal/60 leading-relaxed">
-              We're real transport people. No corporate buzzwords, no empty promises. Just straight-talking logistics that gets the job done.
-            </p>
-          </div>
-        </AnimatedSection>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {reasons.map((r, i) => (
-            <AnimatedSection key={r.title} delay={i * 100}>
-              <div className="bg-white p-7 h-full border border-border">
-                <r.icon className="w-8 h-8 text-maroon mb-5" />
-                <h3 className="text-charcoal font-bold text-lg mb-2 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                  {r.title}
-                </h3>
-                <p className="text-charcoal/55 text-sm leading-relaxed">{r.desc}</p>
-              </div>
-            </AnimatedSection>
           ))}
         </div>
       </div>
@@ -382,43 +151,42 @@ function WhyUs() {
   );
 }
 
-/* ─── Process ─── */
-function Process() {
-  const steps = [
-    { num: "01", title: "Request a Quote", desc: "Tell us what you need moved, where from and where to. We'll come back with a competitive price." },
-    { num: "02", title: "We Source the Haulier", desc: "We tap into our trusted network to find the right vehicle and driver for your specific job." },
-    { num: "03", title: "We Manage the Job", desc: "From collection to delivery, we oversee everything. You'll get updates, not surprises." },
-    { num: "04", title: "Delivered. Done Properly.", desc: "Your freight arrives safely, on time. That's the standard. That's the promise." },
+/* ─── Cinematic Image Section ─── */
+function CinematicImage({ src, alt, children }: { src: string; alt: string; children: React.ReactNode }) {
+  const { ref, visible } = useReveal(0.1);
+  return (
+    <section ref={ref} className="relative min-h-screen flex items-center overflow-hidden bg-black">
+      <div className={`absolute inset-0 transition-all duration-[2000ms] ${visible ? "scale-100 opacity-50" : "scale-110 opacity-0"}`}
+        style={{ transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}>
+        <img src={src} alt={alt} className="w-full h-full object-cover" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60" />
+      <div className="container relative z-10">
+        <div className={`transition-all duration-[1200ms] ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+          style={{ transitionDelay: "400ms", transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}>
+          {children}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Services Scroll ─── */
+function ServicesScroll() {
+  const services = [
+    "UK Transport", "European Freight", "Irish Freight", "Refrigerated",
+    "Time Critical", "General Haulage", "Dedicated Loads", "Pallet & Part Loads", "Brokerage",
   ];
 
   return (
-    <section className="py-20 lg:py-28 bg-white">
-      <div className="container">
-        <AnimatedSection>
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-maroon text-[11px] uppercase tracking-[0.25em] font-bold">How It Works</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl text-charcoal mt-3 mb-5 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-              Simple. Effective. Reliable.
-            </h2>
-            <p className="text-charcoal/60 leading-relaxed">
-              We handle the logistics so you can focus on your business. Four steps, no hassle.
-            </p>
-          </div>
-        </AnimatedSection>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, i) => (
-            <AnimatedSection key={step.num} delay={i * 120}>
-              <div className="relative">
-                <div className="text-[64px] font-black text-cream leading-none mb-4 tracking-tighter" style={{ fontFamily: "var(--font-heading)" }}>
-                  {step.num}
-                </div>
-                <h3 className="text-charcoal font-bold text-lg mb-2 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                  {step.title}
-                </h3>
-                <p className="text-charcoal/55 text-sm leading-relaxed">{step.desc}</p>
-              </div>
-            </AnimatedSection>
+    <section className="bg-black py-20 overflow-hidden">
+      <div className="relative">
+        {/* Marquee */}
+        <div className="flex animate-[marquee_30s_linear_infinite] whitespace-nowrap">
+          {[...services, ...services].map((s, i) => (
+            <span key={i} className="text-white/10 text-6xl sm:text-7xl lg:text-9xl font-black tracking-tighter mx-8" style={{ fontFamily: "var(--font-heading)" }}>
+              {s}
+            </span>
           ))}
         </div>
       </div>
@@ -426,50 +194,70 @@ function Process() {
   );
 }
 
-/* ─── Testimonials (future-ready) ─── */
-function Testimonials() {
-  const testimonials = [
-    {
-      text: "Aston & Earle have been handling our European freight for months now. Reliable, communicative, and they actually care about getting it right. Proper outfit.",
-      name: "Logistics Manager",
-      company: "Manufacturing Client",
-    },
-    {
-      text: "We needed a last-minute temperature-controlled load sorted and Oliver had it covered within the hour. That's the kind of service you can't put a price on.",
-      name: "Operations Director",
-      company: "Food Distribution Client",
-    },
-    {
-      text: "Straight-talking, no messing about. They tell you what they can do, and then they do it. Refreshing in this industry.",
-      name: "Supply Chain Manager",
-      company: "Retail Client",
-    },
+/* ─── Stats Section ─── */
+function StatsSection() {
+  const { ref, visible } = useReveal(0.2);
+  const stats = [
+    { value: "UK", sub: "Wide Coverage" },
+    { value: "24/7", sub: "Availability" },
+    { value: "EU", sub: "& Ireland" },
+    { value: "100%", sub: "Commitment" },
   ];
 
   return (
-    <section className="py-20 lg:py-28 bg-cream">
+    <section ref={ref} className="bg-black py-28 lg:py-36 border-t border-white/5">
       <div className="container">
-        <AnimatedSection>
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-maroon text-[11px] uppercase tracking-[0.25em] font-bold">What People Say</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl text-charcoal mt-3 mb-5 tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-              Trusted by businesses.
-            </h2>
-          </div>
-        </AnimatedSection>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          {stats.map((s, i) => (
+            <div
+              key={s.sub}
+              className={`text-center transition-all duration-[1000ms] ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              style={{ transitionDelay: `${i * 150}ms`, transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
+            >
+              <div className="text-4xl sm:text-5xl lg:text-6xl text-white font-black tracking-tighter" style={{ fontFamily: "var(--font-heading)" }}>
+                {s.value}
+              </div>
+              <div className="text-white/30 text-[11px] uppercase tracking-[0.2em] mt-3 font-semibold">{s.sub}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
-            <AnimatedSection key={i} delay={i * 100}>
-              <div className="bg-white p-8 border border-border h-full flex flex-col">
-                <Quote className="w-8 h-8 text-cream-dark mb-5" />
-                <p className="text-charcoal/70 text-sm leading-relaxed flex-1 italic">"{t.text}"</p>
-                <div className="mt-6 pt-5 border-t border-border">
-                  <div className="text-charcoal font-bold text-sm" style={{ fontFamily: "var(--font-heading)" }}>{t.name}</div>
-                  <div className="text-charcoal/40 text-xs mt-0.5">{t.company}</div>
+/* ─── Values Section ─── */
+function ValuesSection() {
+  const values = [
+    { title: "Integrity", desc: "We say what we mean. We deliver what we promise." },
+    { title: "Relationships", desc: "Long-term partnerships, not one-off transactions." },
+    { title: "Accountability", desc: "We take ownership. No excuses. No passing the buck." },
+    { title: "Results", desc: "The right solution. Every single time." },
+  ];
+
+  return (
+    <section className="bg-black py-28 lg:py-40">
+      <div className="container max-w-4xl">
+        <CinematicSection>
+          <p className="text-maroon-light text-[11px] uppercase tracking-[0.3em] font-bold mb-4">Our Values</p>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white font-black tracking-tighter mb-16" style={{ fontFamily: "var(--font-heading)" }}>
+            Built on values<br /><span className="text-white/30">that actually matter.</span>
+          </h2>
+        </CinematicSection>
+
+        <div className="space-y-12">
+          {values.map((v, i) => (
+            <CinematicSection key={v.title} className={`border-t border-white/8 pt-10`}>
+              <div className="flex items-start gap-8">
+                <span className="text-white/10 text-5xl font-black tracking-tighter shrink-0" style={{ fontFamily: "var(--font-heading)" }}>
+                  0{i + 1}
+                </span>
+                <div>
+                  <h3 className="text-white text-2xl font-bold tracking-tight mb-2" style={{ fontFamily: "var(--font-heading)" }}>{v.title}</h3>
+                  <p className="text-white/40 text-lg leading-relaxed">{v.desc}</p>
                 </div>
               </div>
-            </AnimatedSection>
+            </CinematicSection>
           ))}
         </div>
       </div>
@@ -480,34 +268,30 @@ function Testimonials() {
 /* ─── CTA Section ─── */
 function CTASection() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0">
-        <img src={WAREHOUSE} alt="Logistics warehouse" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-charcoal/85" />
-      </div>
-      <div className="container relative z-10 text-center">
-        <AnimatedSection>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white font-black tracking-tight mb-6" style={{ fontFamily: "var(--font-heading)" }}>
-            Ready to move freight?
+    <section className="bg-black py-32 lg:py-44 border-t border-white/5">
+      <div className="container text-center">
+        <CinematicSection>
+          <h2 className="text-4xl sm:text-5xl lg:text-7xl text-white font-black tracking-tighter leading-[0.95]" style={{ fontFamily: "var(--font-heading)" }}>
+            Ready to move?
           </h2>
-          <p className="text-white/60 max-w-lg mx-auto mb-10 leading-relaxed">
-            Whether it's a single pallet or a full fleet, get in touch and let's get it sorted. No obligation, just a straight quote.
+          <p className="text-white/40 text-lg mt-6 max-w-md mx-auto">
+            Get a straight quote. No obligation. No runaround.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4 mt-12">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-3 bg-maroon text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-maroon-light transition-all duration-200 active:scale-[0.97]"
+              className="inline-flex items-center gap-3 bg-white text-charcoal px-10 py-5 text-[14px] font-bold uppercase tracking-[0.1em] hover:bg-cream transition-all duration-200 active:scale-[0.97]"
             >
               Get a Quote <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href="tel:+447473252561"
-              className="inline-flex items-center gap-3 border-2 border-white/25 text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:border-cream hover:text-cream transition-all duration-200"
+              className="inline-flex items-center gap-3 border border-white/20 text-white px-10 py-5 text-[14px] font-bold uppercase tracking-[0.1em] hover:border-white/50 transition-all duration-200"
             >
-              Call Us Now
+              Call Us
             </a>
           </div>
-        </AnimatedSection>
+        </CinematicSection>
       </div>
     </section>
   );
@@ -516,17 +300,44 @@ function CTASection() {
 /* ─── Main ─── */
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-black">
       <Navbar />
       <main>
         <Hero />
+        <StatementSection />
         <FleetShowcase />
-        <StatsBar />
-        <ServicesOverview />
-        <CoverageSection />
-        <WhyUs />
-        <Process />
-        <Testimonials />
+        <CinematicImage src={PORT} alt="European freight port">
+          <p className="text-maroon-light text-[11px] uppercase tracking-[0.3em] font-bold mb-4">European Reach</p>
+          <h2 className="text-4xl sm:text-5xl lg:text-7xl text-white font-black tracking-tighter leading-[0.95]" style={{ fontFamily: "var(--font-heading)" }}>
+            UK. Ireland.<br />Europe.
+          </h2>
+          <p className="text-white/50 text-lg mt-6 max-w-lg leading-relaxed">
+            From local UK deliveries to cross-channel European freight. Our trusted haulier partnerships span the continent.
+          </p>
+        </CinematicImage>
+        <ServicesScroll />
+        <CinematicImage src={FRIDGE} alt="Refrigerated truck in mountains">
+          <p className="text-maroon-light text-[11px] uppercase tracking-[0.3em] font-bold mb-4">Specialist Transport</p>
+          <h2 className="text-4xl sm:text-5xl lg:text-7xl text-white font-black tracking-tighter leading-[0.95]" style={{ fontFamily: "var(--font-heading)" }}>
+            Temperature<br />controlled.
+          </h2>
+          <p className="text-white/50 text-lg mt-6 max-w-lg leading-relaxed">
+            Cold chain integrity from collection to delivery. Chilled, frozen, pharma-capable.
+          </p>
+        </CinematicImage>
+        <StatsSection />
+        <ValuesSection />
+        <CinematicImage src={IRISH} alt="Cargo ferry crossing Irish Sea">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-maroon-light text-[11px] uppercase tracking-[0.3em] font-bold mb-4">Cross-Channel</p>
+            <h2 className="text-4xl sm:text-5xl lg:text-7xl text-white font-black tracking-tighter leading-[0.95]" style={{ fontFamily: "var(--font-heading)" }}>
+              Ireland.<br /><span className="text-white/30">Handled properly.</span>
+            </h2>
+            <p className="text-white/50 text-lg mt-6 max-w-lg mx-auto leading-relaxed">
+              Ferry coordination, customs, compliance. We handle the cross-channel logistics so you don't have to.
+            </p>
+          </div>
+        </CinematicImage>
         <CTASection />
       </main>
       <Footer />
