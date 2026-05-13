@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "wouter";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   ShieldCheck,
   Handshake,
@@ -36,98 +36,93 @@ const VEHICLE_VAN = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BH
 const VEHICLE_RIGID = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/vehicle-rigid-fVJVuotwb4xZdSxBTKmuqC.png";
 const VEHICLE_HGV = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/vehicle-hgv-cJoQAHA7SVJQYfdQfBEQwY.png";
 
-/* ─── Intro Animation ─── */
-function IntroAnimation({ onComplete }: { onComplete: () => void }) {
-  const [phase, setPhase] = useState(0); // 0=logo, 1=vehicles enter, 2=text, 3=exit
+/* ─── Fleet Scroll Animation Section ─── */
+function FleetShowcase() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [triggered, setTriggered] = useState(false);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 600);   // vehicles start entering
-    const t2 = setTimeout(() => setPhase(2), 1800);  // labels appear
-    const t3 = setTimeout(() => setPhase(3), 4500);  // start exit
-    const t4 = setTimeout(() => onComplete(), 5500); // done
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTriggered(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const vehicles = [
+    { img: VEHICLE_VAN, name: "Van", label: "Light Freight", size: "w-[160px] sm:w-[200px] lg:w-[260px]" },
+    { img: VEHICLE_RIGID, name: "Rigid", label: "Insulated", size: "w-[180px] sm:w-[240px] lg:w-[320px]" },
+    { img: VEHICLE_HGV, name: "Class 1 HGV", label: "Insulated Trailer", size: "w-[220px] sm:w-[280px] lg:w-[380px]" },
+  ];
 
   return (
-    <div
-      className={`fixed inset-0 z-[100] bg-charcoal flex flex-col items-center justify-center overflow-hidden transition-opacity duration-700 ${
-        phase >= 3 ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
-    >
-      {/* Logo */}
-      <div className={`absolute top-8 left-1/2 -translate-x-1/2 transition-all duration-700 ${
-        phase >= 1 ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-      }`}>
-        <img src={LOGO} alt="Aston & Earle" className="h-[60px] lg:h-[80px] w-auto object-contain" />
-      </div>
-
-      {/* Heading */}
-      <div className={`absolute top-28 lg:top-32 text-center transition-all duration-700 delay-300 ${
-        phase >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-      }`}>
-        <h2 className="text-white text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-          Our Fleet
-        </h2>
-        <p className="text-white/50 text-sm mt-2">From vans to artics. Whatever you need moved.</p>
-      </div>
-
-      {/* Vehicles container */}
-      <div className="flex items-end justify-center gap-4 sm:gap-8 lg:gap-12 mt-16 px-4 w-full max-w-6xl">
-        {/* Van - enters from left */}
-        <div className={`flex flex-col items-center transition-all duration-[800ms] cubic-bezier(0.23,1,0.32,1) ${
-          phase >= 1 ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-[120%]"
-        }`} style={{ transitionDelay: "0ms" }}>
-          <img src={VEHICLE_VAN} alt="Delivery Van" className="w-[180px] sm:w-[220px] lg:w-[280px] h-auto object-contain drop-shadow-2xl" />
-          <div className={`mt-4 text-center transition-all duration-500 ${
-            phase >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-          }`} style={{ transitionDelay: "0ms" }}>
-            <p className="text-white font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>Van</p>
-            <p className="text-white/40 text-[11px] uppercase tracking-wider">Light Freight</p>
-          </div>
+    <section ref={sectionRef} className="bg-charcoal py-20 lg:py-28 overflow-hidden">
+      <div className="container">
+        {/* Heading */}
+        <div className={`text-center mb-14 transition-all duration-700 ${
+          triggered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+        }`}>
+          <span className="text-maroon-light text-[11px] uppercase tracking-[0.25em] font-bold">Our Fleet</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white font-black tracking-tight mt-3" style={{ fontFamily: "var(--font-heading)" }}>
+            From vans to artics.
+          </h2>
+          <p className="text-white/50 text-sm mt-3">Whatever you need moved, we have the right vehicle.</p>
         </div>
 
-        {/* Rigid - enters from bottom */}
-        <div className={`flex flex-col items-center transition-all duration-[800ms] cubic-bezier(0.23,1,0.32,1) ${
-          phase >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[120%]"
-        }`} style={{ transitionDelay: "150ms" }}>
-          <img src={VEHICLE_RIGID} alt="Rigid Insulated Lorry" className="w-[200px] sm:w-[260px] lg:w-[340px] h-auto object-contain drop-shadow-2xl" />
-          <div className={`mt-4 text-center transition-all duration-500 ${
-            phase >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-          }`} style={{ transitionDelay: "150ms" }}>
-            <p className="text-white font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>Rigid</p>
-            <p className="text-white/40 text-[11px] uppercase tracking-wider">Insulated</p>
-          </div>
+        {/* Vehicles - slide in from right with stagger */}
+        <div className="flex items-end justify-center gap-6 sm:gap-10 lg:gap-14">
+          {vehicles.map((v, i) => (
+            <div
+              key={v.name}
+              className={`flex flex-col items-center transition-all duration-[900ms] ${
+                triggered
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 translate-x-[100px]"
+              }`}
+              style={{
+                transitionDelay: triggered ? `${i * 200}ms` : "0ms",
+                transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
+              }}
+            >
+              <img
+                src={v.img}
+                alt={v.name}
+                className={`${v.size} h-auto object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-300`}
+              />
+              <div
+                className={`mt-5 text-center transition-all duration-500 ${
+                  triggered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
+                style={{ transitionDelay: triggered ? `${600 + i * 150}ms` : "0ms" }}
+              >
+                <p className="text-white font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>{v.name}</p>
+                <p className="text-white/40 text-[11px] uppercase tracking-wider mt-0.5">{v.label}</p>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* HGV - enters from right */}
-        <div className={`flex flex-col items-center transition-all duration-[800ms] cubic-bezier(0.23,1,0.32,1) ${
-          phase >= 1 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[120%]"
-        }`} style={{ transitionDelay: "300ms" }}>
-          <img src={VEHICLE_HGV} alt="Class 1 HGV with Insulated Trailer" className="w-[240px] sm:w-[300px] lg:w-[400px] h-auto object-contain drop-shadow-2xl" />
-          <div className={`mt-4 text-center transition-all duration-500 ${
-            phase >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-          }`} style={{ transitionDelay: "300ms" }}>
-            <p className="text-white font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>Class 1 HGV</p>
-            <p className="text-white/40 text-[11px] uppercase tracking-wider">Insulated Trailer</p>
-          </div>
+        {/* Bottom CTA */}
+        <div className={`text-center mt-14 transition-all duration-700 ${
+          triggered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+        }`} style={{ transitionDelay: triggered ? "900ms" : "0ms" }}>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-3 bg-maroon text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-maroon-light transition-all duration-200 active:scale-[0.97]"
+          >
+            Get a Quote <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
-
-      {/* Bottom tagline */}
-      <div className={`absolute bottom-10 text-center transition-all duration-700 ${
-        phase >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-      }`} style={{ transitionDelay: "400ms" }}>
-        <p className="text-maroon-light text-[11px] uppercase tracking-[0.3em] font-bold">European Logistics. Done Properly.</p>
-      </div>
-
-      {/* Skip button */}
-      <button
-        onClick={onComplete}
-        className="absolute top-6 right-6 text-white/30 hover:text-white/70 text-[11px] uppercase tracking-[0.15em] font-semibold transition-colors duration-200"
-      >
-        Skip
-      </button>
-    </div>
+    </section>
   );
 }
 
@@ -499,21 +494,12 @@ function CTASection() {
 
 /* ─── Main ─── */
 export default function Home() {
-  const [showIntro, setShowIntro] = useState(() => {
-    return !sessionStorage.getItem("ae-intro-seen");
-  });
-
-  const handleIntroComplete = useCallback(() => {
-    setShowIntro(false);
-    sessionStorage.setItem("ae-intro-seen", "1");
-  }, []);
-
   return (
     <div className="min-h-screen flex flex-col">
-      {showIntro && <IntroAnimation onComplete={handleIntroComplete} />}
       <Navbar />
       <main>
         <Hero />
+        <FleetShowcase />
         <StatsBar />
         <ServicesOverview />
         <CoverageSection />
