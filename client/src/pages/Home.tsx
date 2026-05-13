@@ -38,87 +38,108 @@ const VEHICLE_HGV = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BH
 
 /* ─── Fleet Scroll Animation Section ─── */
 function FleetShowcase() {
+  const [phase, setPhase] = useState<"initial" | "animating" | "done">("initial");
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [triggered, setTriggered] = useState(false);
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTriggered(true);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const triggerAnimation = () => {
+    setPhase("animating");
+    // Scroll to the fleet section
+    setTimeout(() => {
+      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 100);
+    setTimeout(() => setPhase("done"), 1200);
+  };
 
   const vehicles = [
-    { img: VEHICLE_VAN, name: "Van", label: "Light Freight", size: "w-[160px] sm:w-[200px] lg:w-[260px]" },
-    { img: VEHICLE_RIGID, name: "Rigid", label: "Insulated", size: "w-[180px] sm:w-[240px] lg:w-[320px]" },
-    { img: VEHICLE_HGV, name: "Class 1 HGV", label: "Insulated Trailer", size: "w-[220px] sm:w-[280px] lg:w-[380px]" },
+    { img: VEHICLE_VAN, name: "Van", label: "Light Freight", size: "w-[140px] sm:w-[180px] lg:w-[240px]" },
+    { img: VEHICLE_RIGID, name: "Rigid", label: "Insulated", size: "w-[160px] sm:w-[220px] lg:w-[300px]" },
+    { img: VEHICLE_HGV, name: "Class 1 HGV", label: "Insulated Trailer", size: "w-[200px] sm:w-[260px] lg:w-[360px]" },
   ];
 
   return (
-    <section ref={sectionRef} className="bg-charcoal py-20 lg:py-28 overflow-hidden">
-      <div className="container">
-        {/* Heading */}
+    <section ref={sectionRef} className="relative bg-cream overflow-hidden">
+      {/* Initial state - before animation */}
+      <div className={`flex flex-col items-center justify-center py-20 lg:py-28 transition-all duration-500 ${
+        phase !== "initial" ? "opacity-0 scale-95 absolute inset-0 pointer-events-none" : "opacity-100"
+      }`}>
+        <img src={LOGO} alt="Aston & Earle" className="h-[50px] lg:h-[60px] w-auto object-contain mb-6" />
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl text-charcoal font-black tracking-tight text-center" style={{ fontFamily: "var(--font-heading)" }}>
+          Our Fleet
+        </h2>
+        <p className="text-charcoal/50 text-sm mt-3 text-center max-w-md">
+          See the vehicles that keep your freight moving across the UK, Ireland and Europe.
+        </p>
+        <button
+          onClick={triggerAnimation}
+          className="mt-8 inline-flex items-center gap-3 bg-maroon text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-maroon-light transition-all duration-200 active:scale-[0.97]"
+        >
+          Let's Go <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Animated state - vehicles fly in from bottom */}
+      <div className={`py-20 lg:py-28 transition-all duration-500 ${
+        phase === "initial" ? "opacity-0 pointer-events-none h-0 overflow-hidden" : "opacity-100"
+      }`}>
+        {/* Header text */}
         <div className={`text-center mb-14 transition-all duration-700 ${
-          triggered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`}>
-          <span className="text-maroon-light text-[11px] uppercase tracking-[0.25em] font-bold">Our Fleet</span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl text-white font-black tracking-tight mt-3" style={{ fontFamily: "var(--font-heading)" }}>
-            From vans to artics.
+          phase !== "initial" ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+        }`} style={{ transitionDelay: "200ms" }}>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl text-charcoal font-black tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+            Which do you need?
           </h2>
-          <p className="text-white/50 text-sm mt-3">Whatever you need moved, we have the right vehicle.</p>
+          <p className="text-charcoal/50 text-sm mt-2">Choose your vehicle type and get a quote.</p>
         </div>
 
-        {/* Vehicles - slide in from right with stagger */}
-        <div className="flex items-end justify-center gap-6 sm:gap-10 lg:gap-14">
+        {/* Vehicles - enter from bottom with 3D rotation */}
+        <div className="flex items-end justify-center gap-6 sm:gap-10 lg:gap-16 perspective-[1200px]">
           {vehicles.map((v, i) => (
             <div
               key={v.name}
-              className={`flex flex-col items-center transition-all duration-[900ms] ${
-                triggered
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 translate-x-[100px]"
-              }`}
-              style={{
-                transitionDelay: triggered ? `${i * 200}ms` : "0ms",
-                transitionTimingFunction: "cubic-bezier(0.23, 1, 0.32, 1)",
-              }}
+              className="flex flex-col items-center"
             >
-              <img
-                src={v.img}
-                alt={v.name}
-                className={`${v.size} h-auto object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-300`}
-              />
+              <div
+                className={`transition-all duration-[1000ms] ${
+                  phase !== "initial"
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-[200px]"
+                }`}
+                style={{
+                  transitionDelay: phase !== "initial" ? `${i * 150}ms` : "0ms",
+                  transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+                  transform: phase !== "initial"
+                    ? "translateY(0) rotateX(0deg)"
+                    : "translateY(200px) rotateX(25deg)",
+                }}
+              >
+                <img
+                  src={v.img}
+                  alt={v.name}
+                  className={`${v.size} h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)] hover:scale-[1.08] transition-transform duration-300 cursor-pointer`}
+                />
+              </div>
               <div
                 className={`mt-5 text-center transition-all duration-500 ${
-                  triggered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  phase === "done" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                 }`}
-                style={{ transitionDelay: triggered ? `${600 + i * 150}ms` : "0ms" }}
+                style={{ transitionDelay: `${800 + i * 100}ms` }}
               >
-                <p className="text-white font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>{v.name}</p>
-                <p className="text-white/40 text-[11px] uppercase tracking-wider mt-0.5">{v.label}</p>
+                <p className="text-charcoal font-bold text-sm tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>{v.name}</p>
+                <p className="text-charcoal/40 text-[11px] uppercase tracking-wider mt-0.5">{v.label}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom CTA */}
+        {/* CTA button after animation */}
         <div className={`text-center mt-14 transition-all duration-700 ${
-          triggered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`} style={{ transitionDelay: triggered ? "900ms" : "0ms" }}>
+          phase === "done" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+        }`} style={{ transitionDelay: "1100ms" }}>
           <Link
             href="/contact"
             className="inline-flex items-center gap-3 bg-maroon text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.12em] hover:bg-maroon-light transition-all duration-200 active:scale-[0.97]"
           >
-            Get a Quote <ArrowRight className="w-4 h-4" />
+            I'm Ready <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
