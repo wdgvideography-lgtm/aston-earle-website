@@ -9,12 +9,12 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 
-const OLIVER = "/manus-storage/oliver-scania_d3abf2f8.jpg";
-const BILLY_TRUCK = "/manus-storage/billy-whizz-truck_8f44e2a4.jpg";
-const BILLY_PORTRAIT = "/manus-storage/billy-whizz-portrait_6072934b.jpg";
+const OLIVER = "/images/oliver-scania.jpg";
+const BILLY_TRUCK = "/images/billy-whizz-truck.jpg";
+const BILLY_PORTRAIT = "/images/billy-whizz-portrait.jpg";
 const HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/hero-european-nRrYC7qmjk65wYZzCYdxYy.webp";
 const WAREHOUSE = "https://d2xsxph8kpxj0f.cloudfront.net/310519663571760510/BHBaG53LjHiyeiVeW5bVd3/warehouse-logistics-53rAr2W64JaZoR58bYVGK7.webp";
-const LOGO = "/manus-storage/ae-logo_efe7df47.png";
+const LOGO = "/images/ae-logo.png";
 
 export default function About() {
   return (

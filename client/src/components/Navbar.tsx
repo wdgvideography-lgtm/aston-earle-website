@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Phone, Mail, Menu, X } from "lucide-react";
 
-const LOGO = "/manus-storage/ae-logo_efe7df47.png";
+const LOGO = "/images/ae-logo.png";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

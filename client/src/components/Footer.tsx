@@ -5,7 +5,7 @@
 import { Link } from "wouter";
 import { Phone, Mail, MapPin } from "lucide-react";
 
-const LOGO = "/manus-storage/ae-logo_efe7df47.png";
+const LOGO = "/images/ae-logo.png";
 
 export default function Footer() {
   return (
